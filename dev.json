@@ -12,7 +12,7 @@
 		"/install/vmlinuz ",
 		"preseed/url=cfg/preseed.cfg ",
 		"debian-installer=en_US auto locale=en_US kbd-chooser/method=us ",
-		"hostname={{.Name}} ",
+		"hostname=packer-dev ",
 		"fb=false debconf/frontend=noninteractive ",
 		"keyboard-configuration/modelcode=SKIP keyboard-configuration/layout=USA ",
 		"keyboard-configuration/variant=USA console-setup/ask_detect=false ",
