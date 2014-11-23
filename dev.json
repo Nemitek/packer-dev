@@ -1,0 +1,47 @@
+{
+	"builders": [{
+		"type": "virtualbox-iso",
+		"guest_os_type": "Ubuntu_64",
+		"iso_url": "http://releases.ubuntu.com/14.04.1/ubuntu-14.04.1-server-amd64.iso",
+		"iso_checksum": "ca2531b8cd79ea5b778ede3a524779b9",
+		"iso_checksum_type": "md5",
+		"ssh_username": "vagrant",
+		"ssh_password": "vagrant",
+		"boot_wait": "5s",
+		"boot_command": ["<esc><esc><enter><wait>",
+		"/install/vmlinuz ",
+		"preseed/url=cfg/preseed.cfg ",
+		"debian-installer=en_US auto locale=en_US kbd-chooser/method=us ",
+		"hostname={{.Name}} ",
+		"fb=false debconf/frontend=noninteractive ",
+		"keyboard-configuration/modelcode=SKIP keyboard-configuration/layout=USA ",
+		"keyboard-configuration/variant=USA console-setup/ask_detect=false ",
+		"initrd=/install/initrd.gz -- <enter>"],
+		"ssh_wait_timeout": "30s",
+		"shutdown_command": "echo 'vagrant' | sudo -S shutdown -P now"
+	}],
+	"provisioners": [{
+		"type": "shell",
+		"inline": ["sleep 30",
+		"sudo add-apt-repository ppa:webupd8team/java",
+		"sudo apt-get update",
+		"sudo apt-get install -y curl git vim",
+		"sudo apt-get install -y oracle-java8-installer",
+		"sudo apt-get install -y oracle-java8-set-default",
+		"sudo apt-get install -y python-dev",
+		"sudo apt-get install -y ruby",
+		"sudo apt-get install -y php",
+		"sudo apt-get install -y postgresql",
+		"sudo apt-get install -y apache2",
+		"sudo apt-get install -y php5 libapache2-mod-php5 php5-mcrypt"]
+	},
+	{
+		"type": "shell",
+		"script": "scripts/vagrant_bootstrap.sh"
+	},
+	{
+		"type": "shell",
+		"script": "scripts/install_scala_sbt.sh"
+	}],
+	"post-processors": ["vagrant"]
+}
