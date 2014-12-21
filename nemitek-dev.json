@@ -1,0 +1,81 @@
+{
+	"builders" : [{
+			"type" : "virtualbox-iso",
+			"guest_os_type" : "Ubuntu_64",
+			"iso_url" : "http://releases.ubuntu.com/14.04.1/ubuntu-14.04.1-server-amd64.iso",
+			"iso_checksum" : "ca2531b8cd79ea5b778ede3a524779b9",
+			"iso_checksum_type" : "md5",
+			"ssh_username" : "vagrant",
+			"ssh_password" : "vagrant",
+			"ssh_wait_timeout" : "30m",
+			"http_directory" : "cfg",
+			"http_port_min" : 9001,
+			"http_port_max" : 9001,
+			"boot_wait" : "5s",
+			"headless" : "false",
+			"guest_additions_mode" : "disable",
+			"vm_name" : "nemitek-dev",
+			"boot_command" : ["<esc><esc><enter><wait>",
+				"/install/vmlinuz ",
+				"preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg ",
+				"debian-installer=en_US auto locale=en_US kbd-chooser/method=us ",
+				"hostname={{ .Name }} ",
+				"fb=false debconf/frontend=noninteractive ",
+				"keyboard-configuration/modelcode=SKIP keyboard-configuration/layout=USA ",
+				"keyboard-configuration/variant=USA console-setup/ask_detect=false ",
+				"initrd=/install/initrd.gz -- <enter>"],
+			"shutdown_command": "echo 'vagrant' | sudo -S -E shutdown -P now"
+		}
+	],
+	"provisioners" : [{
+			"type" : "shell",
+			"execute_command": "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'",
+			"inline" : ["sleep 30",	
+				"sudo apt-get update",
+				"sudo apt-get install -y software-properties-common",
+				"echo | sudo add-apt-repository ppa:webupd8team/java",
+				"sudo apt-get update",
+				"sudo apt-get install -y curl git vim make",
+				"echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections",
+				"sudo apt-get install -y oracle-java8-installer",
+				"sudo apt-get install -y oracle-java8-set-default",
+				"sudo apt-get install -y python-dev",
+				"sudo apt-get install -y ruby",
+				"sudo apt-get install -y postgresql",
+				"sudo apt-get install -y apache2",
+				"sudo apt-get install -y nodejs npm",
+				"sudo apt-get install -y php5 libapache2-mod-php5 php5-mcrypt",
+				"cd ~",
+				"sudo wget http://www.scala-lang.org/files/archive/scala-2.11.4.deb",
+				"sudo wget http://dl.bintray.com/sbt/debian/sbt-0.13.6.deb",
+				"sudo dpkg -i scala-2.11.4.deb",
+				"sudo dpkg -i sbt-0.13.6.deb",
+				"sudo apt-get update",
+				"sudo apt-get install -y scala",
+				"sudo apt-get install -y sbt",
+				"sudo rm -rf scala-2.11.4.deb",
+				"sudo rm -rf sbt-0.13.6.deb",
+				"sudo wget http://download.virtualbox.org/virtualbox/4.3.20/VBoxGuestAdditions_4.3.20.iso",
+				"sudo mkdir guestadditions",
+				"sudo mount -o loop VBoxGuestAdditions_4.3.20.iso guestadditions",
+				"cd guestadditions",
+				"sudo ./VBoxLinuxAdditions.run",
+				"cd ..",
+				"sudo umount guestadditions",
+				"sudo rm -rf guestadditions",
+				"sudo rm -rf ~/.vimrc"]
+		}, {
+			"type" : "file",
+			"source" : "cfg/.vimrc",
+			"destination" : "~/.vimrc"
+		}, {
+			"type" : "shell",
+			"script" : "scripts/git_config.sh"
+		}, {
+			"type" : "shell",
+			"execute_command": "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'",
+			"script" : "scripts/vagrant_bootstrap.sh"
+		}
+	],
+	"post-processors" : ["vagrant"]
+}
