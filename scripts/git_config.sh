@@ -1,19 +1,19 @@
-git config --global user.name "aiur"
-git config --global user.email mkotlikov@gmail.com
-git config --global core.editor vim
-git config --global color.branch auto
-git config --global color.diff auto
-git config --global color.interactive auto
-git config --global color.status auto
-git config --global color.ui auto
-git config --global push.default current
-git config --global alias.st status
-git config --global alias.ci commit
-git config --global alias.br branch
-git config --global alias.co checkout
-git config --global alias.df diff
-git config --global alias.fe fetch
-git config --global alias.cp cherry-pick
-git config --global alias.rb rebase
-git config --global alias.sm submodule
-git config --global alias.lg 'log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit --date=relative'
+sudo git config --global user.name "aiur"
+sudo git config --global user.email mkotlikov@gmail.com
+sudo git config --global core.editor vim
+sudo git config --global color.branch auto
+sudo git config --global color.diff auto
+sudo git config --global color.interactive auto
+sudo git config --global color.status auto
+sudo git config --global color.ui auto
+sudo git config --global push.default current
+sudo git config --global alias.st status
+sudo git config --global alias.ci commit
+sudo git config --global alias.br branch
+sudo git config --global alias.co checkout
+sudo git config --global alias.df diff
+sudo git config --global alias.fe fetch
+sudo git config --global alias.cp cherry-pick
+sudo git config --global alias.rb rebase
+sudo git config --global alias.sm submodule
+sudo git config --global alias.lg 'log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit --date=relative'
