@@ -3,7 +3,7 @@
 sudo echo 'vagrant ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
 
 sudo useradd -d /home/nemitek -m nemitek
-echo nemitek | passwd nemitek --stdin
+echo 'nemitek:nemitek' | sudo chpasswd
 sudo echo 'nemitek ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
 
 # Grab vagrant public key and create related files

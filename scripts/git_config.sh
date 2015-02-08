@@ -1,4 +1,4 @@
-sudo git config --global user.name "aiur"
+sudo git config --global user.name "nemitek"
 sudo git config --global user.email mkotlikov@gmail.com
 sudo git config --global core.editor vim
 sudo git config --global color.branch auto

@@ -13,8 +13,8 @@
 			"http_port_max" : 9001,
 			"boot_wait" : "5s",
 			"headless" : "false",
-			"guest_additions_mode" : "disable",
 			"vm_name" : "nemitek-dev",
+			"guest_additions_mode" : "disable",
 			"boot_command" : ["<esc><esc><enter><wait>",
 				"/install/vmlinuz ",
 				"preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg ",
@@ -39,13 +39,15 @@
 				"echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections",
 				"sudo apt-get install -y oracle-java8-installer",
 				"sudo apt-get install -y oracle-java8-set-default",
-				"sudo apt-get install -y maven2",
+				"sudo apt-get install -y maven",
 				"sudo apt-get install -y python-dev",
 				"sudo apt-get install -y ruby",
 				"sudo apt-get install -y postgresql",
 				"sudo apt-get install -y apache2",
 				"sudo apt-get install -y nodejs npm",
 				"sudo apt-get install -y php5 libapache2-mod-php5 php5-mcrypt",
+				"sudo echo '127.0.0.1       localpg' >> /etc/hosts",
+				"sudo echo '127.0.0.1       www.nemitek.dev nemitek.dev' >> /etc/hosts",
 				"sudo apt-get install -y samba",
 				"cd ~",
 				"sudo wget http://www.scala-lang.org/files/archive/scala-2.11.5.deb",
@@ -78,10 +80,6 @@
 		}, {
 			"type" : "shell",
 			"execute_command": "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'",			
-			"script" : "scripts/git_config.sh"
-		}, {
-			"type" : "shell",
-			"execute_command": "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'",			
 			"script" : "scripts/vagrant_bootstrap.sh"
 		}, {
 			"type" : "shell",
@@ -91,7 +89,13 @@
 						"sudo mv -f smb.conf /etc/samba/smb.conf",
 						"sudo service smbd restart",
 						"cd /home/nemitek",
-						"sudo ln -s /var/www www"]
+						"sudo ln -s /var/www www",
+						"sudo chown -R nemitek.nemitek /var/www",
+						"(echo nemitek; echo nemitek) | sudo smbpasswd -a nemitek"]
+		}, {
+			"type" : "shell",
+			"execute_command": "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'",			
+			"script" : "scripts/git_config.sh"
 		}
 	],
 	"post-processors" : ["vagrant"]
