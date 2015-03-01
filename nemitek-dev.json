@@ -40,7 +40,8 @@
 				"sudo apt-get install -y oracle-java8-installer",
 				"sudo apt-get install -y oracle-java8-set-default",
 				"sudo apt-get install -y maven",
-				"sudo apt-get install -y python-dev",
+				"sudo apt-get install -y apt-get install -y libxml2-dev libxslt1-dev python3-pip",
+				"sudo pip3 install pquery",
 				"sudo apt-get install -y ruby",
 				"sudo apt-get install -y postgresql",
 				"sudo apt-get install -y apache2",
@@ -59,14 +60,6 @@
 				"sudo apt-get install -y sbt",
 				"sudo rm -rf scala-2.11.5.deb",
 				"sudo rm -rf sbt-0.13.7.deb",
-				"sudo wget http://download.virtualbox.org/virtualbox/4.3.20/VBoxGuestAdditions_4.3.20.iso",
-				"sudo mkdir guestadditions",
-				"sudo mount -o loop VBoxGuestAdditions_4.3.20.iso guestadditions",
-				"cd guestadditions",
-				"sudo ./VBoxLinuxAdditions.run",
-				"cd ..",
-				"sudo umount guestadditions",
-				"sudo rm -rf guestadditions",
 				"sudo rm -rf ~/.vimrc",
 				"sudo rm -rf /etc/samba/smb.conf"]
 		}, {
@@ -95,6 +88,10 @@
 		}, {
 			"type" : "shell",
 			"execute_command": "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'",			
+			"script" : "scripts/git_config.sh"
+		}, {
+			"type" : "shell",
+			"execute_command": "echo 'sudo su - nemitek' | echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'",			
 			"script" : "scripts/git_config.sh"
 		}
 	],
