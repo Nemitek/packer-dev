@@ -3,3 +3,4 @@ builds/*
 packer.log
 output-*
 .idea
+*.box
