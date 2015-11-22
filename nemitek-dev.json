@@ -2,15 +2,15 @@
 	"builders" : [{
 			"type" : "virtualbox-iso",
 			"guest_os_type" : "Ubuntu_64",
-			"iso_url" : "http://releases.ubuntu.com/14.04.1/ubuntu-14.04.1-server-amd64.iso",
-			"iso_checksum" : "ca2531b8cd79ea5b778ede3a524779b9",
+			"iso_url" : "http://releases.ubuntu.com/14.04/ubuntu-14.04.3-server-amd64.iso",
+			"iso_checksum" : "9e5fecc94b3925bededed0fdca1bd417",
 			"iso_checksum_type" : "md5",
 			"ssh_username" : "vagrant",
 			"ssh_password" : "vagrant",
 			"ssh_wait_timeout" : "30m",
 			"http_directory" : "cfg",
-			"http_port_min" : 9001,
-			"http_port_max" : 9001,
+			"http_port_min" : 9002,
+			"http_port_max" : 9002,
 			"boot_wait" : "5s",
 			"headless" : "false",
 			"vm_name" : "nemitek-dev",
@@ -28,9 +28,15 @@
 		}
 	],
 	"provisioners" : [{
+			"type" : "file",
+			"source" : "postgresql/pgdg.list",
+			"destination" : "~/pgdg.list"
+		}, {
 			"type" : "shell",
 			"execute_command": "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'",
-			"inline" : ["sleep 30",	
+			"inline" : ["sleep 30",
+				"sudo mv ~/pgdg.list /etc/apt/sources.list.d/pgdg.list",
+				"sudo wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -",
 				"sudo apt-get update",
 				"sudo apt-get install -y software-properties-common",
 				"echo | sudo add-apt-repository ppa:webupd8team/java",
@@ -41,25 +47,33 @@
 				"sudo apt-get install -y oracle-java8-set-default",
 				"sudo apt-get install -y maven",
 				"sudo apt-get install -y apt-get install -y libxml2-dev libxslt1-dev python3-pip",
+				"sudo apt-get install -y python-setuptools python-dev build-essential",
+				"sudo apt-get install -y gfortran",
+				"sudo easy_install pip",
+				"sudo pip install --upgrade virtualenv",
+				"sudo apt-get install -y libblas-dev liblapack-dev",
+				"sudo pip install keras pandas",
 				"sudo pip3 install pquery",
 				"sudo apt-get install -y ruby",
-				"sudo apt-get install -y postgresql",
+				"sudo apt-get install -y postgresql-9.4",
 				"sudo apt-get install -y apache2",
-				"sudo apt-get install -y nodejs npm",
+				"curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -",
+				"sudo apt-get install -y nodejs",
+				"sudo apt-get install -y erlang erlang-doc",
 				"sudo apt-get install -y php5 libapache2-mod-php5 php5-mcrypt",
 				"sudo echo '127.0.0.1       localpg' >> /etc/hosts",
 				"sudo echo '127.0.0.1       www.nemitek.dev nemitek.dev' >> /etc/hosts",
 				"sudo apt-get install -y samba",
 				"cd ~",
-				"sudo wget http://www.scala-lang.org/files/archive/scala-2.11.6.deb",
-				"sudo wget http://dl.bintray.com/sbt/debian/sbt-0.13.8.deb",
-				"sudo dpkg -i scala-2.11.6.deb",
-				"sudo dpkg -i sbt-0.13.8.deb",
+				"sudo wget http://www.scala-lang.org/files/archive/scala-2.11.7.deb",
+				"sudo wget http://dl.bintray.com/sbt/debian/sbt-0.13.9.deb",
+				"sudo dpkg -i scala-2.11.7.deb",
+				"sudo dpkg -i sbt-0.13.9.deb",
 				"sudo apt-get update",
 				"sudo apt-get install -y scala",
 				"sudo apt-get install -y sbt",
-				"sudo rm -rf scala-2.11.6.deb",
-				"sudo rm -rf sbt-0.13.8.deb",
+				"sudo rm -rf scala-2.11.7.deb",
+				"sudo rm -rf sbt-0.13.9.deb",
 				"sudo rm -rf ~/.vimrc",
 				"sudo rm -rf /etc/samba/smb.conf"]
 		}, {
@@ -72,7 +86,7 @@
 			"destination" : "~/smb.conf"
 		}, {
 			"type" : "shell",
-			"execute_command": "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'",			
+			"execute_command": "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'",
 			"script" : "scripts/vagrant_bootstrap.sh"
 		}, {
 			"type" : "shell",
@@ -87,11 +101,11 @@
 						"(echo nemitek; echo nemitek) | sudo smbpasswd -a nemitek"]
 		}, {
 			"type" : "shell",
-			"execute_command": "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'",			
+			"execute_command": "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'",
 			"script" : "scripts/git_config.sh"
 		}, {
 			"type" : "shell",
-			"execute_command": "echo 'sudo su - nemitek' | echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'",			
+			"execute_command": "echo 'sudo su - nemitek' | echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'",
 			"script" : "scripts/git_config.sh"
 		}
 	],
