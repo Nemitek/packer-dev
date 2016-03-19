@@ -55,7 +55,7 @@
 				"sudo pip install keras pandas",
 				"sudo pip3 install pquery",
 				"sudo apt-get install -y ruby",
-				"sudo apt-get install -y postgresql-9.4",
+				"sudo apt-get install -y postgresql-9.5",
 				"sudo apt-get install -y apache2",
 				"curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -",
 				"sudo apt-get install -y nodejs",
